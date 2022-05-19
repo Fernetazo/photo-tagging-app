@@ -25,6 +25,7 @@ const App = () => {
 
   const [locations, setLocations] = useState();
   const [userCoordinates, setUserCoordinates] = useState();
+  const [foundCharacters, setFoundCharacters] = useState([]);
 
   /*
 // Get a list of liders from your database
@@ -73,7 +74,7 @@ let leaderboard = getLiderboard(db);
   };
 
   const manageChSelection = (e) => {
-    let character = e.target.textContent.toLowerCase();
+    let character = e.target.textContent;
     let index = locations.findIndex((obj) => Object.keys(obj)[0] === character);
 
     if (
@@ -82,9 +83,18 @@ let leaderboard = getLiderboard(db);
       userCoordinates[1] > Object.values(locations[index])[0][1] &&
       userCoordinates[1] < Object.values(locations[index])[0][3]
     ) {
-      console.log("Es ese!");
+      checkCharacters(character);
     } else {
-      console.log("No encontró nada");
+      console.log("No, it's not");
+    }
+  };
+
+  const checkCharacters = (character) => {
+    if (foundCharacters.some((e) => e === character)) {
+      console.log("You already found", character, "...");
+    } else {
+      setFoundCharacters(foundCharacters.concat(character));
+      console.log("You found", character, "!");
     }
   };
 
