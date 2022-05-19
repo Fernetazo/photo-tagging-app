@@ -1,20 +1,32 @@
-import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs } from "firebase/firestore/lite";
+import React, { useState, useEffect } from "react";
 import waldo1 from "./images/waldo1.png";
+import { initializeApp } from "firebase/app";
+import {
+  getFirestore,
+  collection,
+  getDoc,
+  getDocs,
+  doc,
+} from "firebase/firestore/lite";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCkD50M6XKeVkPQYIygb1_rSjdmOfFyoo0",
-  authDomain: "photo-tagging-app-1b523.firebaseapp.com",
-  projectId: "photo-tagging-app-1b523",
-  storageBucket: "photo-tagging-app-1b523.appspot.com",
-  messagingSenderId: "308150812667",
-  appId: "1:308150812667:web:ed1c5e8a7e60d64b82d55e",
-  measurementId: "G-X4K06VV8H3",
-};
+const App = () => {
+  const firebaseConfig = {
+    apiKey: "AIzaSyCkD50M6XKeVkPQYIygb1_rSjdmOfFyoo0",
+    authDomain: "photo-tagging-app-1b523.firebaseapp.com",
+    projectId: "photo-tagging-app-1b523",
+    storageBucket: "photo-tagging-app-1b523.appspot.com",
+    messagingSenderId: "308150812667",
+    appId: "1:308150812667:web:ed1c5e8a7e60d64b82d55e",
+    measurementId: "G-X4K06VV8H3",
+  };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
+  const [locations, setLocations] = useState();
+  const [userCoordinates, setUserCoordinates] = useState();
+
+  /*
 // Get a list of liders from your database
 async function getLiderboard(db) {
   const leaderboard = collection(db, "leaderboard");
@@ -25,40 +37,67 @@ async function getLiderboard(db) {
 
 let leaderboard = getLiderboard(db);
 //console.log(leaderboard);
+*/
 
-// TO DO: Get coordinates correctly (when zooming, they change)
-const manageImgClicked = (e) => {
-  let modalContainer = document.querySelector(".modalContainer");
-  modalContainer.style.opacity = "1";
-  modalContainer.style.visibility = "visible";
+  // Get a list of locations from your database
+  async function getLocations(db) {
+    const docRef = doc(db, "locations", "coordinates");
+    const docSnap = await getDoc(docRef);
 
-  let xDisplay = e.clientX;
-  let yDisplay = e.clientY;
-  console.log("X display: " + xDisplay + " - Y display: " + yDisplay + ".");
+    // Converts object (docSnap.data()) to array of objects to save it on hook state
+    const arrayOfObj = Object.entries(docSnap.data()).map((e) => ({
+      [e[0]]: e[1],
+    }));
 
-  let modal = document.querySelector(".modal");
-  modal.style.top = yDisplay + "px";
-  modal.style.left = xDisplay + 20 + "px";
+    setLocations(arrayOfObj);
+  }
 
-  // TO DO: Round results (when zoomed, it will throw decimal point numbers)
-  // Maybe they wont hurt?
-  let rect = e.target.getBoundingClientRect();
-  let xImage = xDisplay - rect.left; //x position within the element.
-  let yImage = yDisplay - rect.top; //y position within the element.
-  console.log("Left? : " + xImage + " - Top? : " + yImage + ".");
-};
+  const manageImgClicked = (e) => {
+    let modalContainer = document.querySelector(".modalContainer");
+    modalContainer.style.opacity = "1";
+    modalContainer.style.visibility = "visible";
 
-const manageClickOutsideModal = (e) => {
-  let modalContainer = document.querySelector(".modalContainer");
-  modalContainer.style.opacity = "0";
-  modalContainer.style.visibility = "hidden";
-};
+    let xDisplay = e.clientX;
+    let yDisplay = e.clientY;
 
-const manageChSelection = () => {
-  console.log("TODO verify with the server");
-};
+    let modal = document.querySelector(".modal");
+    modal.style.top = yDisplay + "px";
+    modal.style.left = xDisplay + 20 + "px";
 
-function App() {
+    let rect = e.target.getBoundingClientRect();
+    let xImage = xDisplay - rect.left; //x position within the element.
+    let yImage = yDisplay - rect.top; //y position within the element.
+    //console.log("Left? : " + xImage + " - Top? : " + yImage + ".");
+
+    setUserCoordinates([xImage, yImage]);
+  };
+
+  const manageChSelection = (e) => {
+    let character = e.target.textContent.toLowerCase();
+    let index = locations.findIndex((obj) => Object.keys(obj)[0] === character);
+
+    if (
+      userCoordinates[0] > Object.values(locations[index])[0][0] &&
+      userCoordinates[0] < Object.values(locations[index])[0][2] &&
+      userCoordinates[1] > Object.values(locations[index])[0][1] &&
+      userCoordinates[1] < Object.values(locations[index])[0][3]
+    ) {
+      console.log("Es ese!");
+    } else {
+      console.log("No encontró nada");
+    }
+  };
+
+  const manageClickOutsideModal = (e) => {
+    let modalContainer = document.querySelector(".modalContainer");
+    modalContainer.style.opacity = "0";
+    modalContainer.style.visibility = "hidden";
+  };
+
+  useEffect(() => {
+    getLocations(db);
+  }, []);
+
   return (
     <div>
       <div className="modalContainer" onClick={manageClickOutsideModal}>
@@ -104,6 +143,6 @@ function App() {
       </div>
     </div>
   );
-}
+};
 
 export default App;
