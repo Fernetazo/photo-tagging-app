@@ -8,10 +8,11 @@ import { initializeApp } from "firebase/app";
 import {
   getFirestore,
   collection,
+  addDoc,
   getDoc,
-  getDocs,
   doc,
-} from "firebase/firestore/lite";
+} from "firebase/firestore";
+// Note: firestore lite version doesnt work well. Has missing functions
 
 const App = () => {
   const firebaseConfig = {
@@ -27,6 +28,8 @@ const App = () => {
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
+  const [initialTime, setInitialTime] = useState();
+  const [finalTime, setFinalTime] = useState();
   const [locations, setLocations] = useState();
   const [userCoordinates, setUserCoordinates] = useState();
   const [foundCharacters, setFoundCharacters] = useState([]);
@@ -115,14 +118,34 @@ let leaderboard = getLiderboard(db);
   };
 
   const checkWin = () => {
-    if (foundCharacters.length === 3) {
-      console.log("YOU WIN!!!");
-      //TO DO: Check time
+    if (foundCharacters.length === 1) {
+      let modalEndgameContainer = document.querySelector(
+        ".modalEndgameContainer"
+      );
+      modalEndgameContainer.style.opacity = "1";
+      modalEndgameContainer.style.visibility = "visible";
+
+      setFinalTime(((new Date() - new Date(initialTime)) / 1000).toFixed(2));
     }
+  };
+
+  const sendInput = async () => {
+    let modalEndgameContainer = document.querySelector(
+      ".modalEndgameContainer"
+    );
+    modalEndgameContainer.style.opacity = "0";
+    modalEndgameContainer.style.visibility = "hidden";
+    let input = document.querySelector(".modalEndgameInput").value;
+    await addDoc(collection(db, "leaderboard"), {
+      name: input,
+      time: finalTime,
+    });
+    //TODO show leaders
   };
 
   useEffect(() => {
     getLocations(db);
+    setInitialTime(new Date());
   }, []);
 
   useEffect(() => {
@@ -147,6 +170,24 @@ let leaderboard = getLiderboard(db);
           </div>
         </div>
       </header>
+      <div className="modalEndgameContainer">
+        <div className="modalEndgame">
+          <div className="modalEndgameText">YOU WIN!!!</div>
+          <div className="modalEndgameText">Your time is:</div>
+          <div className="modalEndgameText">{finalTime} seconds</div>
+          <div className="modalEndgameText">
+            Please, enter your name to register it in the leaderboard:
+          </div>
+          <input
+            className="modalEndgameInput"
+            type="text"
+            placeholder="Name"
+          ></input>
+          <button className="modalEndgameButton" onClick={sendInput}>
+            Send
+          </button>
+        </div>
+      </div>
       <div className="modalContainer" onClick={manageClickOutsideModal}>
         <div className="modal">
           Who is it?

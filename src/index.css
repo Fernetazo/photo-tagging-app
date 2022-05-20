@@ -31,7 +31,8 @@ map {
   cursor: zoom-in;
 }
 
-.modalContainer {
+.modalContainer,
+.modalEndgameContainer {
   position: fixed;
   z-index: 1;
   top: 0;
@@ -55,4 +56,18 @@ map {
 .modalOption:hover {
   color: orange;
   cursor: pointer;
+}
+
+.modalEndgame {
+  display: flex;
+  flex-direction: column;
+  border: solid 2px black;
+  position: absolute;
+  background-color: white;
+  top: 25%;
+  left: 25%;
+}
+
+.modalEndgameText {
+  text-align: center;
 }
