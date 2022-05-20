@@ -2,6 +2,27 @@ body {
   margin: 0;
 }
 
+.iconsContainer {
+  display: flex;
+  flex-direction: row;
+  column-gap: 15px;
+}
+
+.iconContainer {
+  display: flex;
+  flex-direction: column;
+  transition: all 1s;
+}
+
+.icon {
+  width: 55px;
+  height: 55px;
+}
+
+.iconText {
+  font-weight: bold;
+}
+
 .mainImage {
   cursor: zoom-in;
 }

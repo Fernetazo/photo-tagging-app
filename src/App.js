@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
 import waldo1 from "./images/waldo1.png";
+import Waldo from "./images/waldo-mini.jpg";
+import Odlaw from "./images/odlaw-mini.jpg";
+import Wizard from "./images/wizard-mini.jpeg";
+
 import { initializeApp } from "firebase/app";
 import {
   getFirestore,
@@ -68,7 +72,6 @@ let leaderboard = getLiderboard(db);
     let rect = e.target.getBoundingClientRect();
     let xImage = xDisplay - rect.left; //x position within the element.
     let yImage = yDisplay - rect.top; //y position within the element.
-    //console.log("Left? : " + xImage + " - Top? : " + yImage + ".");
 
     setUserCoordinates([xImage, yImage]);
   };
@@ -91,11 +94,18 @@ let leaderboard = getLiderboard(db);
 
   const checkCharacters = (character) => {
     if (foundCharacters.some((e) => e === character)) {
-      console.log("You already found", character, "...");
+      console.log("You already found " + character + "...");
     } else {
       setFoundCharacters(foundCharacters.concat(character));
-      console.log("You found", character, "!");
+      console.log("You found " + character + "!");
+      changeIconStyle(character);
     }
+  };
+
+  const changeIconStyle = (character) => {
+    let iconContainer = document.querySelector("." + character);
+    iconContainer.style.textDecoration = "line-through";
+    iconContainer.style.opacity = "0.3";
   };
 
   const manageClickOutsideModal = (e) => {
@@ -104,12 +114,39 @@ let leaderboard = getLiderboard(db);
     modalContainer.style.visibility = "hidden";
   };
 
+  const checkWin = () => {
+    if (foundCharacters.length === 3) {
+      console.log("YOU WIN!!!");
+      //TO DO: Check time
+    }
+  };
+
   useEffect(() => {
     getLocations(db);
   }, []);
 
+  useEffect(() => {
+    checkWin();
+  }, [foundCharacters]);
+
   return (
     <div>
+      <header>
+        <div className="iconsContainer">
+          <div className="iconContainer Waldo">
+            <img className="icon" src={Waldo} alt="Waldo icon"></img>
+            <div className="iconText">Waldo</div>
+          </div>
+          <div className="iconContainer Odlaw">
+            <img className="icon" src={Odlaw} alt="Odlaw icon"></img>
+            <div className="iconText">Odlaw</div>
+          </div>
+          <div className="iconContainer Wizard">
+            <img className="icon" src={Wizard} alt="Wizard icon"></img>
+            <div className="iconText">Wizard</div>
+          </div>
+        </div>
+      </header>
       <div className="modalContainer" onClick={manageClickOutsideModal}>
         <div className="modal">
           Who is it?
