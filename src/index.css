@@ -32,7 +32,8 @@ map {
 }
 
 .modalContainer,
-.modalEndgameContainer {
+.modalEndgameContainer,
+.leaderboardModalContainer {
   position: fixed;
   z-index: 1;
   top: 0;
@@ -69,5 +70,53 @@ map {
 }
 
 .modalEndgameText {
+  text-align: center;
+}
+
+.leaderboardModal {
+  display: flex;
+  flex-direction: column;
+  border: solid 5px black;
+  background-color: white;
+  position: absolute;
+  width: 600px;
+  height: 800px;
+}
+
+.leaderboardTitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  text-align: center;
+  font-size: 40px;
+  height: 10%;
+}
+
+.leaderboardSubtitle {
+  display: flex;
+  font-weight: bold;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 35px;
+  height: 10%;
+}
+
+.leaderboardList {
+  height: 80%;
+  overflow: scroll;
+}
+
+.LeaderboardItem {
+  display: flex;
+  flex-direction: row;
+  font-size: 26px;
+  height: 55px;
+}
+
+.name,
+.time {
+  width: 50%;
+  overflow: hidden;
   text-align: center;
 }

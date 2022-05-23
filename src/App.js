@@ -10,8 +10,12 @@ import {
   collection,
   addDoc,
   getDoc,
+  getDocs,
   doc,
+  query,
+  orderBy,
 } from "firebase/firestore";
+import { async } from "@firebase/util";
 // Note: firestore lite version doesnt work well. Has missing functions
 
 const App = () => {
@@ -28,27 +32,15 @@ const App = () => {
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  const [initialTime, setInitialTime] = useState();
-  const [finalTime, setFinalTime] = useState();
   const [locations, setLocations] = useState();
   const [userCoordinates, setUserCoordinates] = useState();
+  const [initialTime, setInitialTime] = useState();
+  const [finalTime, setFinalTime] = useState();
   const [foundCharacters, setFoundCharacters] = useState([]);
-
-  /*
-// Get a list of liders from your database
-async function getLiderboard(db) {
-  const leaderboard = collection(db, "leaderboard");
-  const leaderboardSnapshot = await getDocs(leaderboard);
-  const leadersboardList = leaderboardSnapshot.docs.map((doc) => doc.data());
-  return leadersboardList;
-}
-
-let leaderboard = getLiderboard(db);
-//console.log(leaderboard);
-*/
+  const [leaderboard, setLeaderboard] = useState();
 
   // Get a list of locations from your database
-  async function getLocations(db) {
+  async function getLocations() {
     const docRef = doc(db, "locations", "coordinates");
     const docSnap = await getDoc(docRef);
 
@@ -130,27 +122,68 @@ let leaderboard = getLiderboard(db);
   };
 
   const sendInput = async () => {
-    let modalEndgameContainer = document.querySelector(
-      ".modalEndgameContainer"
-    );
-    modalEndgameContainer.style.opacity = "0";
-    modalEndgameContainer.style.visibility = "hidden";
     let input = document.querySelector(".modalEndgameInput").value;
-    await addDoc(collection(db, "leaderboard"), {
-      name: input,
-      time: finalTime,
-    });
-    //TODO show leaders
+    if (input.length <= 14) {
+      let modalEndgameContainer = document.querySelector(
+        ".modalEndgameContainer"
+      );
+      modalEndgameContainer.style.opacity = "0";
+      modalEndgameContainer.style.visibility = "hidden";
+
+      await addDoc(collection(db, "leaderboard"), {
+        name: input,
+        time: parseFloat(finalTime),
+      });
+      getLeaderboard();
+
+      let leaderboardModalContainer = document.querySelector(
+        ".leaderboardModalContainer"
+      );
+      leaderboardModalContainer.style.opacity = "1";
+      leaderboardModalContainer.style.visibility = "visible";
+    }
+  };
+
+  const getLeaderboard = async () => {
+    const leadersRef = query(collection(db, "leaderboard"), orderBy("time"));
+    const leadersSnap = await getDocs(leadersRef);
+    const leadersList = leadersSnap.docs.map((doc) => doc.data());
+    setLeaderboard(leadersList);
   };
 
   useEffect(() => {
-    getLocations(db);
+    getLocations();
     setInitialTime(new Date());
+    getLeaderboard();
   }, []);
 
   useEffect(() => {
     checkWin();
   }, [foundCharacters]);
+
+  const Leaderboard = () => {
+    return (
+      <div className="leaderboardModal">
+        <div className="leaderboardTitle">LEADERBOARD</div>
+        <div className="leaderboardSubtitle">
+          <div className="leaderboardColumn">Name</div>
+          <div className="leaderboardColumn">Time</div>
+        </div>
+        <div className="leaderboardList">
+          {leaderboard
+            ? leaderboard.map((e, i) => {
+                return (
+                  <div className="LeaderboardItem" key={i}>
+                    <div className="name">{e.name}</div>
+                    <div className="time">{e.time} s</div>
+                  </div>
+                );
+              })
+            : "Loading..."}
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div>
@@ -170,6 +203,9 @@ let leaderboard = getLiderboard(db);
           </div>
         </div>
       </header>
+      <div className="leaderboardModalContainer">
+        <Leaderboard />
+      </div>
       <div className="modalEndgameContainer">
         <div className="modalEndgame">
           <div className="modalEndgameText">YOU WIN!!!</div>
