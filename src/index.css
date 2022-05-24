@@ -15,6 +15,34 @@
 body {
   margin: 0;
   font-family: "Officina-Sans-OS-ITC-TT";
+  display: flex;
+  justify-content: center;
+}
+
+header {
+  display: flex;
+  justify-content: space-around;
+  height: 150px;
+  align-items: center;
+}
+
+.mainTitle {
+  font-family: "Optima-LT-ExtraBlack";
+  font-size: 50px;
+  display: flex;
+  flex-direction: row;
+  column-gap: 15px;
+}
+
+.waldoBorder {
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.red {
+  color: #ed2624;
+}
+.blue {
+  color: #00acee;
 }
 
 .iconsContainer {
@@ -41,6 +69,7 @@ body {
 
 .mainImage {
   cursor: zoom-in;
+  border: solid 2px black;
 }
 
 map {
@@ -63,36 +92,81 @@ map {
 }
 
 .modal {
-  background-color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #00acee;
   color: white;
-  border: solid 1px white;
+  border: solid 2px white;
+  border-radius: 10%;
   width: 100px;
   position: absolute;
+  font-size: 20px;
+}
+
+.modalOption {
+  font-size: 18px;
 }
 
 .modalOption:hover {
-  color: orange;
+  color: #ed2624;
   cursor: pointer;
+}
+
+.modalEndgame,
+.leaderboardModal {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 5%;
+  border: solid 2px black;
 }
 
 .modalEndgame {
   display: flex;
   flex-direction: column;
-  border: solid 2px black;
   position: absolute;
   background-color: white;
-  top: 25%;
-  left: 25%;
+  width: 800px;
+  row-gap: 20px;
+  padding: 30px;
+  align-items: center;
 }
 
 .modalEndgameText {
+  margin-top: 20px;
   text-align: center;
+  font-size: 35px;
+}
+
+.modalEndgameTextWin {
+  font-family: "Optima-LT-ExtraBlack";
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.modalEndgameInput {
+  font-size: 35px;
+  font-family: "Officina-Sans-OS-ITC-TT";
+}
+
+.modalEndgameButton {
+  font-size: 35px;
+  width: 200px;
+  background-color: #00acee;
+  border-radius: 15px;
+  border: none;
+  color: white;
+  font-family: "Officina-Sans-OS-ITC-TT";
+}
+
+.modalEndgameButton:hover {
+  background-color: #34bbf1;
+  cursor: pointer;
 }
 
 .leaderboardModal {
   display: flex;
   flex-direction: column;
-  border: solid 5px black;
   background-color: white;
   position: absolute;
   width: 600px;
@@ -101,7 +175,6 @@ map {
 
 .leaderboardTitle {
   font-family: "Optima-LT-ExtraBlack";
-  font-weight: bold;
   display: flex;
   justify-content: center;
   align-items: center;

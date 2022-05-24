@@ -15,8 +15,8 @@ import {
   query,
   orderBy,
 } from "firebase/firestore";
-import { async } from "@firebase/util";
-// Note: firestore lite version doesnt work well. Has missing functions
+// import { async } from "@firebase/util";
+// Note: firestore lite version doesnt work well. Has missing functions. Had to change to normal version (no lite)
 
 const App = () => {
   const firebaseConfig = {
@@ -110,7 +110,7 @@ const App = () => {
   };
 
   const checkWin = () => {
-    if (foundCharacters.length === 1) {
+    if (foundCharacters.length === 3) {
       let modalEndgameContainer = document.querySelector(
         ".modalEndgameContainer"
       );
@@ -164,10 +164,12 @@ const App = () => {
   const Leaderboard = () => {
     return (
       <div className="leaderboardModal">
-        <div className="leaderboardTitle">LEADERBOARD</div>
+        <div className="leaderboardTitle blue waldoBorder">
+          LEADER<div className="leaderboardTitle red waldoBorder">BOARD</div>
+        </div>
         <div className="leaderboardSubtitle">
-          <div className="leaderboardColumn">Name</div>
-          <div className="leaderboardColumn">Time</div>
+          <div className="leaderboardColumn waldoBorder blue">Name</div>
+          <div className="leaderboardColumn waldoBorder red">Time</div>
         </div>
         <div className="leaderboardList">
           {leaderboard
@@ -188,6 +190,10 @@ const App = () => {
   return (
     <div>
       <header>
+        <div className="mainTitle">
+          <div className="blue waldoBorder">WHERE'S</div>
+          <div className="red waldoBorder">WALDO?</div>
+        </div>
         <div className="iconsContainer">
           <div className="iconContainer Waldo">
             <img className="icon" src={Waldo} alt="Waldo icon"></img>
@@ -208,7 +214,9 @@ const App = () => {
       </div>
       <div className="modalEndgameContainer">
         <div className="modalEndgame">
-          <div className="modalEndgameText">YOU WIN!!!</div>
+          <div className="modalEndgameText modalEndgameTextWin red">
+            YOU WIN!!!
+          </div>
           <div className="modalEndgameText">Your time is:</div>
           <div className="modalEndgameText">{finalTime} seconds</div>
           <div className="modalEndgameText">
@@ -226,7 +234,7 @@ const App = () => {
       </div>
       <div className="modalContainer" onClick={manageClickOutsideModal}>
         <div className="modal">
-          Who is it?
+          WHO IS IT?
           <div className="modalOption" onClick={manageChSelection}>
             Waldo
           </div>
