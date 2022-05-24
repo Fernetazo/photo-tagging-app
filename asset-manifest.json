@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/photo-tagging-app/static/css/main.62261b4f.css",
+    "main.js": "/photo-tagging-app/static/js/main.ec18c2e2.js",
+    "static/media/waldo1.png": "/photo-tagging-app/static/media/waldo1.80c7896ee803f360d8dc.png",
+    "static/media/waldo-mini.jpg": "/photo-tagging-app/static/media/waldo-mini.1e2ee91f0cfa0ceeb550.jpg",
+    "static/media/odlaw-mini.jpg": "/photo-tagging-app/static/media/odlaw-mini.f34b5260e086e9e07982.jpg",
+    "static/media/Officina-Sans-OS-ITC-TT.woff2": "/photo-tagging-app/static/media/Officina-Sans-OS-ITC-TT.0b94281fd12b9219f6bc.woff2",
+    "static/media/Optima-LT-ExtraBlack.woff2": "/photo-tagging-app/static/media/Optima-LT-ExtraBlack.8da58aa108d367b6476b.woff2",
+    "index.html": "/photo-tagging-app/index.html",
+    "main.62261b4f.css.map": "/photo-tagging-app/static/css/main.62261b4f.css.map",
+    "main.ec18c2e2.js.map": "/photo-tagging-app/static/js/main.ec18c2e2.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.62261b4f.css",
+    "static/js/main.ec18c2e2.js"
+  ]
+}
